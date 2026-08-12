@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101a16">
+<meta name="color-scheme" content="light">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Freaks & Geeks Rally">
+<title>Freaks, Geeks &amp; Frozen Treats · Aug 15, 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650;9..144,900&family=Rye&family=Schibsted+Grotesk:wght@400;500;600;700;800&family=Spline+Sans+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night:#101A16; --night-2:#0B1511;
+  --pine:#17372B; --pine-2:#11291F; --pine-3:#0A1B14;
+  --cream:#F1E6D1; --paper:#FFF9EC; --paper-2:#F7EEDC; --sign:#FFF8E9;
+  --custard:#F2B744; --custard-2:#D89A2B; --red:#C64E48;
+  --strawberry:#C64E48; --berry:#8B3440;
+  --mint:#93BCA4; --aqua:#7FAAB1;
+  --ink:#231D17; --muted:#706455; --soft:#9C8F7D;
+  --line:rgba(35,29,23,.14); --dark-line:rgba(255,248,233,.23);
+  --sh:0 16px 38px rgba(17,29,22,.17); --sh-sm:0 7px 20px rgba(17,29,22,.10);
+  --sb:env(safe-area-inset-bottom,0px); --st:env(safe-area-inset-top,0px);
+  --poster:'Rye','Rockwell Extra Bold',Georgia,serif;
+  --disp:'Fraunces',Georgia,'Times New Roman',serif;
+  --body:'Schibsted Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  --mono:'Spline Sans Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{background:var(--night)}
+html,body{margin:0;padding:0}
+body{
+  min-height:100vh;color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased;
+  display:flex;justify-content:center;
+  background:
+    radial-gradient(circle at 15% 8%,rgba(242,183,68,.18),transparent 28%),
+    radial-gradient(circle at 90% 22%,rgba(198,78,72,.13),transparent 25%),
+    linear-gradient(145deg,#1A3429 0%,#0F2018 56%,#0B1712 100%);
+}
+button{font:inherit;cursor:pointer;color:inherit}
+a{color:inherit}
+.app{
+  width:min(100%,580px);min-height:100vh;background:var(--cream);position:relative;
+  box-shadow:0 0 80px rgba(0,0,0,.34);padding-bottom:calc(24px + var(--sb));overflow:hidden;
+  isolation:isolate;
+}
+.app::before{
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.28;
+  background-image:
+    radial-gradient(circle at 20% 30%,rgba(64,49,31,.08) 0 1px,transparent 1.2px),
+    radial-gradient(circle at 75% 68%,rgba(64,49,31,.06) 0 1px,transparent 1.2px);
+  background-size:22px 22px,31px 31px;
+}
+
+/* ===== top progress rail ===== */
+.rail{
+  position:sticky;top:0;z-index:60;background:rgba(10,27,20,.97);backdrop-filter:blur(12px);
+  padding:calc(9px + var(--st)) 13px 0;border-bottom:1px solid rgba(255,255,255,.05);
+  box-shadow:0 6px 22px rgba(5,15,11,.36)
+}
+.rail-track{display:flex;align-items:center;gap:5px;min-height:38px}
+.rail-chip{
+  flex:0 0 auto;border:1.5px solid var(--dark-line);background:rgba(255,255,255,.025);color:#D8CCB5;
+  font-family:var(--mono);font-size:8.5px;font-weight:600;letter-spacing:.14em;padding:7px 8px;border-radius:999px;
+  transition:all .18s ease;min-width:40px
+}
+.rail-chip.active{background:var(--custard);border-color:var(--custard);color:var(--pine-3);box-shadow:0 4px 12px rgba(242,183,68,.25)}
+.rail-line{flex:1 1 auto;height:2px;background:rgba(255,248,233,.18);border-radius:4px;position:relative;overflow:hidden;min-width:3px}
+.rail-line.done::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--custard-2),var(--custard))}
+.rail-dot{
+  flex:0 0 auto;width:31px;height:31px;border-radius:50%;border:1.5px solid var(--dark-line);background:rgba(255,255,255,.025);
+  color:#D7CAB1;font-family:var(--disp);font-weight:900;font-size:12px;display:flex;align-items:center;justify-content:center;
+  transition:transform .18s,background .18s,border-color .18s;padding:0
+}
+.rail-dot.current{background:var(--custard);border-color:var(--custard);color:var(--pine-3);transform:scale(1.15);box-shadow:0 5px 16px rgba(0,0,0,.34)}
+.rail-dot.done{background:var(--mint);border-color:var(--mint);color:var(--pine-3)}
+.rail-dot svg{width:14px;height:14px}
+.railbar{height:3px;margin:8px -13px 0;background:rgba(0,0,0,.38)}
+.railbar i{display:block;height:100%;background:linear-gradient(90deg,var(--strawberry),var(--custard));width:0%;transition:width .4s ease}
+
+/* ===== shared ===== */
+.screen{animation:fadeup .28s ease both}
+@keyframes fadeup{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.kicker{font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase}
+.section{padding:22px 18px 2px}
+h2.secname{font-family:var(--disp);font-weight:900;font-size:26px;margin:4px 0 11px;letter-spacing:-.025em;line-height:1.05}
+.card{background:rgba(255,249,236,.92);border:1px solid var(--line);border-radius:18px;box-shadow:var(--sh-sm)}
+.btn{
+  display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border:0;border-radius:14px;padding:16px 15px;
+  font-weight:800;font-size:14.5px;letter-spacing:.025em;background:linear-gradient(180deg,#F6C45E,var(--custard));color:var(--pine-3);
+  box-shadow:0 7px 18px rgba(216,154,43,.29);transition:transform .12s,filter .12s;text-decoration:none
+}
+.btn:active{transform:scale(.985);filter:saturate(.95)}
+.btn.pine{background:linear-gradient(180deg,#1D4435,var(--pine));color:var(--sign);box-shadow:0 7px 18px rgba(17,41,31,.28)}
+.btn.ghost{background:rgba(255,255,255,.22);border:1.5px solid var(--line);color:var(--ink);box-shadow:none;font-weight:700}
+.btn.sm{padding:12px;font-size:12.5px;border-radius:11px}
+button:focus-visible,a:focus-visible,label:focus-within{outline:3px solid var(--custard-2);outline-offset:2px}
+
+/* ===== home / poster ===== */
+.hero{
+  position:relative;min-height:365px;color:var(--sign);padding:31px 22px 70px;overflow:hidden;
+  background:
+    radial-gradient(circle at 84% 14%,rgba(242,183,68,.30),transparent 17%),
+    radial-gradient(circle at 14% 82%,rgba(198,78,72,.22),transparent 29%),
+    linear-gradient(160deg,var(--pine) 0%,var(--pine-2) 58%,var(--night-2) 100%)
+}
+.hero::before{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.2;
+  background-image:
+    linear-gradient(45deg,transparent 47%,rgba(255,255,255,.12) 48% 52%,transparent 53%),
+    linear-gradient(-45deg,transparent 47%,rgba(255,255,255,.08) 48% 52%,transparent 53%);
+  background-size:34px 34px
+}
+.hero::after{content:"";position:absolute;width:210px;height:210px;border-radius:50%;border:1px solid rgba(255,248,233,.12);right:-98px;top:104px;box-shadow:0 0 0 20px rgba(255,248,233,.03),0 0 0 40px rgba(255,248,233,.018)}
+.hero>*{position:relative;z-index:2}
+.hero .plate{display:inline-flex;align-items:center;gap:7px;border:1px solid rgba(255,248,233,.33);background:rgba(255,255,255,.04);border-radius:999px;padding:7px 11px;font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.13em}
+.hero .plate b{color:var(--custard)}
+.hero-mark{
+  position:absolute;right:20px;top:25px;width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  border:1.5px dashed rgba(255,248,233,.36);color:var(--custard);transform:rotate(8deg);background:rgba(0,0,0,.08)
+}
+.hero-mark svg{width:35px;height:35px}.hero-mark span{position:absolute;right:-2px;top:-5px;font-size:21px;color:var(--strawberry);text-shadow:0 1px 0 rgba(0,0,0,.3)}
+.hero h1{font-family:var(--poster);font-weight:400;font-size:clamp(38px,10vw,58px);line-height:.93;margin:28px 0 10px;letter-spacing:.002em;max-width:470px;text-shadow:0 2px 0 rgba(0,0,0,.16)}
+.hero h1 em{display:block;font-style:normal;color:var(--custard);font-size:.85em;margin-top:4px}
+.hero .deck{font-family:var(--disp);font-style:italic;font-size:16px;line-height:1.35;color:#F0E4CE;margin:8px 0 5px;max-width:430px}
+.hero .sub{font-size:13.5px;line-height:1.55;max-width:430px;margin:8px 0 0;color:#DCCFB7}
+.hero .twisted{display:inline-flex;margin-top:17px;background:var(--strawberry);color:#FFF8EB;border-radius:7px;padding:7px 10px;font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;box-shadow:0 5px 0 rgba(100,32,32,.22);transform:rotate(-1deg)}
+.scallop{position:absolute;left:-4px;right:-4px;bottom:-1px;height:28px;color:var(--cream)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);margin:-35px 18px 0;position:relative;z-index:4;background:var(--paper);border:1px solid var(--line);border-radius:18px;box-shadow:var(--sh);overflow:hidden}
+.stat{padding:16px 6px 15px;text-align:center;border-right:1px solid var(--line)}
+.stat:last-child{border-right:0}
+.stat b{display:block;font-family:var(--disp);font-weight:900;font-size:27px;color:var(--strawberry);line-height:1}
+.stat span{display:block;margin-top:5px;font-family:var(--mono);font-size:8px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.sched{padding:5px 16px 9px;overflow:hidden}
+.slot{display:grid;grid-template-columns:74px 1fr;gap:10px;padding:13px 1px;border-bottom:1px dashed rgba(35,29,23,.17);align-items:start}
+.slot:last-child{border-bottom:0}
+.slot .tm{font-family:var(--mono);font-weight:600;font-size:11px;color:var(--berry);background:rgba(198,78,72,.08);border-radius:999px;padding:5px 7px;text-align:center;margin-top:1px}
+.slot .what b{display:block;font-size:14.5px;font-weight:800;line-height:1.2}
+.slot .what span{display:block;margin-top:3px;font-size:12.5px;color:var(--muted);line-height:1.5}
+.stoplist{padding:4px 15px 9px}
+.srow{display:grid;grid-template-columns:34px 1fr auto;align-items:center;gap:11px;padding:12px 1px;border-bottom:1px dashed rgba(35,29,23,.17)}
+.srow:last-child{border-bottom:0}
+.srow .num{width:32px;height:32px;border-radius:50%;background:var(--pine);color:var(--sign);font-family:var(--disp);font-weight:900;display:flex;align-items:center;justify-content:center;font-size:12px;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.12)}
+.srow .nm b{display:block;font-size:14px;font-weight:800;line-height:1.25}
+.srow .nm span{display:block;margin-top:2px;font-size:11.5px;color:var(--muted)}
+.srow .lg{font-family:var(--mono);font-size:9.5px;font-weight:600;color:var(--muted);text-align:right;line-height:1.55}
+.passcard{margin:17px 18px 0;background:linear-gradient(158deg,#17372B,#0E241B);color:var(--sign);border-radius:19px;padding:18px 17px 16px;box-shadow:var(--sh);border:1px solid rgba(255,248,233,.07);position:relative;overflow:hidden}
+.passcard::after{content:"";position:absolute;width:160px;height:160px;border:1px solid rgba(255,255,255,.08);border-radius:50%;right:-86px;bottom:-88px}
+.passcard>*{position:relative;z-index:1}
+.passcard h3{font-family:var(--disp);font-weight:900;font-size:22px;margin:4px 0 7px;color:var(--custard);letter-spacing:-.02em}
+.passcard p{margin:0 0 10px;font-size:13px;line-height:1.56;color:#E5D9C0}
+.pass-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:12px 0}
+.pass-step{border:1px solid rgba(255,248,233,.17);background:rgba(255,255,255,.04);border-radius:10px;padding:9px 7px;text-align:center}
+.pass-step b{display:flex;width:24px;height:24px;border-radius:50%;align-items:center;justify-content:center;margin:0 auto 6px;background:var(--custard);color:var(--pine-3);font-family:var(--disp);font-size:13px}
+.pass-step span{font-family:var(--mono);font-size:7.7px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#D9CDB5;line-height:1.35}
+.prizes{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:12px 0 4px}
+.prize{background:rgba(255,248,233,.06);border:1px solid rgba(255,248,233,.16);border-radius:10px;padding:9px 6px;text-align:center}
+.prize b{display:block;font-family:var(--disp);font-weight:900;font-size:20px;color:var(--custard)}
+.prize span{display:block;margin-top:3px;font-family:var(--mono);font-size:7.4px;letter-spacing:.05em;text-transform:uppercase;color:#CFC2A9;line-height:1.45}
+.startwrap{padding:20px 18px 7px}
+.startwrap .btn{font-size:15px;padding:17px;box-shadow:0 8px 0 rgba(142,94,25,.18),0 12px 22px rgba(216,154,43,.22)}
+
+/* ===== leg header ===== */
+.leghead{position:relative;background:linear-gradient(160deg,var(--pine) 0%,var(--pine-2) 66%,var(--night-2) 100%);color:var(--sign);padding:23px 20px 27px;overflow:hidden}
+.leghead::after{content:"";position:absolute;width:180px;height:180px;border-radius:50%;right:-86px;top:-86px;border:1px solid rgba(255,248,233,.10);box-shadow:0 0 0 18px rgba(255,248,233,.025)}
+.leghead>*{position:relative;z-index:1}
+.legno{position:absolute;right:16px;bottom:5px;font-family:var(--disp);font-size:84px;line-height:.8;font-weight:900;color:rgba(255,248,233,.055);letter-spacing:-.08em;z-index:0}
+.leghead .route{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-top:10px}
+.leghead .route .fr{font-size:12.5px;color:#C6BBA4;font-weight:600;letter-spacing:.01em}
+.leghead h2{font-family:var(--disp);font-weight:900;font-size:clamp(29px,8vw,39px);letter-spacing:-.035em;margin:2px 0 0;line-height:.98;max-width:470px}
+.legmeta{display:flex;gap:7px;margin-top:14px;flex-wrap:wrap}
+.mchip{border:1px solid rgba(255,248,233,.25);background:rgba(255,255,255,.025);border-radius:999px;padding:5px 9px;font-family:var(--mono);font-size:9.3px;font-weight:600;letter-spacing:.055em;color:#DDD1BA}
+.mchip.warn{border-color:rgba(242,183,68,.7);color:var(--custard);background:rgba(242,183,68,.06)}
+
+/* ===== next instruction board ===== */
+.boardwrap{padding:14px 13px 4px;position:relative;z-index:3;margin-top:-12px}
+.board{width:100%;text-align:left;border:0;border-radius:20px;background:linear-gradient(150deg,#102A20,#091912);color:var(--sign);padding:7px;box-shadow:0 17px 34px rgba(9,25,18,.42);position:relative}
+.board .inner{border:1.5px solid rgba(255,248,233,.65);border-radius:14px;padding:16px 15px 14px;display:flex;gap:14px;align-items:center;min-height:100px}
+.board .glyph{flex:0 0 62px;height:62px;border-radius:15px;background:linear-gradient(145deg,#F7C45E,var(--custard));color:var(--pine-3);display:flex;align-items:center;justify-content:center;box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)}
+.board .glyph svg{width:40px;height:40px}
+.board .txt{flex:1 1 auto;min-width:0}
+.board .txt .lbl{display:block;font-family:var(--mono);font-size:8.5px;font-weight:600;letter-spacing:.18em;color:var(--custard);text-transform:uppercase}
+.board .txt .ins{display:block;font-size:18px;font-weight:800;line-height:1.25;margin-top:4px;letter-spacing:-.012em}
+.board .txt .then{margin-top:7px;display:inline-flex;font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.07em;color:var(--pine-3);background:var(--custard);border-radius:7px;padding:4px 8px}
+.board .tapnote{position:absolute;right:14px;top:-9px;background:var(--strawberry);color:var(--sign);font-family:var(--mono);font-size:7.8px;font-weight:600;letter-spacing:.13em;padding:5px 9px;border-radius:999px;box-shadow:0 4px 10px rgba(111,34,34,.28)}
+.board.slide .inner{animation:boardin .26s ease}
+@keyframes boardin{from{opacity:0;transform:translateX(10px)}to{opacity:1;transform:none}}
+.board.alldone{background:linear-gradient(145deg,#9EC3AA,#83AD94);color:var(--pine-3)}
+.board.alldone .inner{border-color:rgba(10,27,20,.35)}
+.board.alldone .txt .lbl{color:var(--pine-2)}
+
+/* ===== route instruction list ===== */
+.turns{padding:13px 13px 2px}
+.step{display:flex;align-items:center;gap:11px;width:100%;text-align:left;background:rgba(255,249,236,.94);border:1px solid rgba(35,29,23,.13);border-radius:15px;padding:11px 11px;margin-bottom:8px;transition:opacity .18s,transform .12s,box-shadow .18s,border-color .18s;box-shadow:0 2px 8px rgba(25,31,24,.035);min-height:61px}
+.step:active{transform:scale(.992)}
+.step .g{flex:0 0 38px;height:38px;border-radius:11px;background:var(--pine);color:var(--sign);display:flex;align-items:center;justify-content:center;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+.step .g svg{width:23px;height:23px}
+.step .t{flex:1 1 auto;min-width:0;font-size:13.8px;font-weight:700;line-height:1.35;letter-spacing:-.004em}
+.step .t small{display:block;font-family:var(--mono);font-size:8.8px;font-weight:600;letter-spacing:.07em;color:var(--muted);margin-top:4px;text-transform:uppercase}
+.step .chk{flex:0 0 28px;height:28px;border-radius:50%;border:1.5px solid rgba(35,29,23,.19);display:flex;align-items:center;justify-content:center;color:transparent;background:rgba(255,255,255,.25)}
+.step .chk svg{width:15px;height:15px}
+.step.cur{border-color:var(--custard-2);box-shadow:0 0 0 3px rgba(242,183,68,.23),0 8px 18px rgba(25,31,24,.08);background:#FFFBF0}
+.step.cur .g{background:var(--custard);color:var(--pine-3)}
+.step.done{opacity:.47;background:var(--paper-2)}
+.step.done .g{background:#918575}
+.step.done .chk{background:var(--mint);border-color:var(--mint);color:var(--pine-3)}
+
+/* ===== scenic + trivia ===== */
+.reveal{margin:11px 13px 0;border:1px solid rgba(23,55,43,.20);border-radius:15px;background:rgba(255,249,236,.58);overflow:hidden;box-shadow:0 2px 9px rgba(25,31,24,.03)}
+.reveal.det{border-color:rgba(198,78,72,.28);background:rgba(198,78,72,.035)}
+.reveal summary{list-style:none;display:flex;align-items:center;gap:8px;padding:13px 14px;font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.14em;color:var(--pine);text-transform:uppercase;cursor:pointer}
+.reveal.det summary{color:var(--berry)}
+.reveal summary::-webkit-details-marker{display:none}
+.reveal summary .pm{margin-left:auto;font-family:var(--body);font-size:18px;font-weight:400;line-height:1;transition:transform .16s}
+.reveal[open] summary .pm{transform:rotate(45deg)}
+.reveal .body{padding:0 14px 14px;font-size:13.3px;line-height:1.62;color:#4B4236}
+.reveal .body b{color:var(--ink)}
+
+/* ===== arrival / creamery ===== */
+.arrive{margin:15px 13px 0;background:linear-gradient(155deg,#17372B,#0D2219);color:var(--sign);border-radius:20px;box-shadow:var(--sh);overflow:hidden;border:1px solid rgba(255,248,233,.07);position:relative}
+.arrive::before{content:"";position:absolute;right:-57px;top:-62px;width:145px;height:145px;border-radius:50%;border:1px solid rgba(255,255,255,.08);box-shadow:0 0 0 16px rgba(255,255,255,.025)}
+.arrive .top{padding:18px 17px 14px;border-bottom:1px solid rgba(255,248,233,.16);position:relative}
+.arrive .top .kicker{color:var(--custard)}
+.arrive h3{font-family:var(--disp);font-weight:900;font-size:28px;margin:5px 0 4px;line-height:1;letter-spacing:-.035em;max-width:430px}
+.arrive .addr{font-size:12px;color:#CCBEA7;line-height:1.55;max-width:420px}
+.arrive .hrs{display:inline-flex;align-items:center;gap:7px;margin-top:10px;background:rgba(255,248,233,.07);border:1px solid rgba(255,248,233,.18);border-radius:999px;padding:6px 10px;font-family:var(--mono);font-size:9.3px;font-weight:600;letter-spacing:.045em;color:#E9DFC9}
+.arrive .hrs.warn{border-color:rgba(242,183,68,.8);color:var(--custard);background:rgba(242,183,68,.07)}
+.arrive .note{margin:12px 17px 0;background:rgba(242,183,68,.11);border-left:3px solid var(--custard);border-radius:0 10px 10px 0;padding:10px 11px;font-size:12.3px;line-height:1.55;color:#F0E5CF}
+.checkin{margin:13px 17px 0;background:rgba(255,248,233,.055);border:1px solid rgba(255,248,233,.18);border-radius:14px;padding:13px}
+.checkin .cl{font-family:var(--mono);font-size:8.7px;font-weight:600;letter-spacing:.17em;color:var(--custard);text-transform:uppercase}
+.checkin p{margin:6px 0 10px;font-size:12.4px;line-height:1.55;color:#DED1B8}
+.checkin label{display:flex;gap:10px;align-items:center;font-size:13.2px;font-weight:800;cursor:pointer;background:rgba(0,0,0,.10);border-radius:10px;padding:9px}
+.checkin input{width:22px;height:22px;accent-color:var(--custard);flex:0 0 auto}
+.arrive .actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:14px 17px 17px}
+.arrive .actions a{display:flex;align-items:center;justify-content:center;text-decoration:none;background:var(--sign);color:var(--pine-3);border-radius:11px;padding:12px 8px;font-size:11.5px;font-weight:800;min-height:43px}
+.arrive .actions a.gold{background:var(--custard)}
+.legfoot{display:grid;grid-template-columns:auto 1fr;gap:9px;padding:15px 13px 23px}
+.legfoot .undo{border:1.5px solid var(--line);background:rgba(255,255,255,.18);border-radius:12px;padding:12px 13px;font-size:11.5px;font-weight:700;color:var(--muted)}
+
+/* ===== finish ===== */
+.fin{position:relative;background:linear-gradient(162deg,var(--pine) 0%,var(--pine-3) 70%,var(--night-2) 100%);color:var(--sign);padding:41px 22px 45px;text-align:center;overflow:hidden}
+.fin::before,.fin::after{content:"✦";position:absolute;color:rgba(242,183,68,.34);font-size:50px;line-height:1}.fin::before{left:18px;top:80px;transform:rotate(-12deg)}.fin::after{right:23px;top:45px;font-size:34px;transform:rotate(15deg)}
+.fin h2{font-family:var(--poster);font-weight:400;font-size:clamp(31px,9vw,48px);margin:16px 0 10px;letter-spacing:0;line-height:.98}
+.fin h2 em{display:block;font-style:normal;color:var(--custard);font-size:.9em;margin-top:4px}
+.fin p{margin:0 auto;max-width:390px;font-size:14px;line-height:1.58;color:#E1D4BC}
+.fin .medal{width:88px;height:88px;margin:0 auto;border-radius:50%;background:linear-gradient(145deg,#F8C75E,var(--custard));color:var(--pine-3);display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(242,183,68,.28),inset 0 0 0 5px rgba(255,255,255,.18);transform:rotate(-3deg)}
+.fin .medal svg{width:49px;height:49px}
+.tally{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:-25px 18px 0;position:relative;z-index:2}
+.tally .card{padding:16px 10px;text-align:center}
+.tally b{display:block;font-family:var(--disp);font-weight:900;font-size:29px;color:var(--strawberry)}
+.tally span{display:block;margin-top:4px;font-family:var(--mono);font-size:8.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.footnote{padding:21px 22px 8px;text-align:center;font-family:var(--mono);font-size:8.7px;font-weight:500;letter-spacing:.13em;color:#8A7D6B;text-transform:uppercase;line-height:1.8}
+
+@media (max-width:390px){
+  .hero{padding-left:18px;padding-right:18px}.hero h1{font-size:36px}.hero-mark{width:56px;height:56px;right:15px}.hero-mark svg{width:31px;height:31px}
+  .stats{margin-left:13px;margin-right:13px}.section{padding-left:13px;padding-right:13px}.passcard,.startwrap{margin-left:13px;margin-right:13px}.startwrap{padding-left:0;padding-right:0}
+  .board .inner{padding:14px 12px;gap:11px}.board .glyph{flex-basis:56px;height:56px}.board .txt .ins{font-size:16.5px}
+  .step{gap:8px}.step .t{font-size:13.2px}.arrive h3{font-size:25px}
+}
+/* sideshow additions */
+.hero::before{content:"";position:absolute;left:0;right:0;top:0;height:11px;background:repeating-linear-gradient(90deg,var(--strawberry) 0 26px,var(--sign) 26px 52px);opacity:.92;z-index:2}
+.ticket{display:inline-flex;align-items:center;gap:8px;margin:10px 0 0 10px;border:1.5px dashed rgba(255,248,233,.5);border-radius:8px;padding:7px 11px;font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.13em;color:var(--sign)}
+.wakepill{margin:12px 14px 0;text-align:center;font-family:var(--mono);font-size:8.5px;font-weight:600;letter-spacing:.16em;color:var(--soft)}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+
+/* ===== final bodywork pass: premium roadside-sideshow polish ===== */
+:root{
+  --ivory:#FFF9EC;
+  --ink-deep:#17120E;
+  --rescue:#B73A35;
+  --rescue-deep:#7A2524;
+}
+body{background:
+  radial-gradient(circle at 12% 7%,rgba(242,183,68,.22),transparent 27%),
+  radial-gradient(circle at 90% 26%,rgba(198,78,72,.15),transparent 24%),
+  linear-gradient(145deg,#18372B 0%,#0D1D16 58%,#08110D 100%)}
+.app{box-shadow:0 0 0 1px rgba(255,255,255,.04),0 0 90px rgba(0,0,0,.46)}
+.rail{border-bottom:1px solid rgba(242,183,68,.12)}
+.hero{min-height:382px;padding-top:37px}
+.hero::before{height:10px;background:repeating-linear-gradient(90deg,var(--strawberry) 0 24px,var(--sign) 24px 48px);box-shadow:0 1px 0 rgba(0,0,0,.28)}
+.hero .plate{box-shadow:inset 0 0 0 1px rgba(0,0,0,.06);backdrop-filter:blur(6px)}
+.hero h1{font-size:clamp(40px,10.4vw,61px);line-height:.91;margin-top:30px;text-wrap:balance}
+.hero h1 em{font-size:.88em;text-shadow:0 2px 0 rgba(0,0,0,.16)}
+.hero .deck{font-size:17px;letter-spacing:.005em}
+.hero .sub{max-width:455px}
+.hero .twisted{border:1px solid rgba(255,255,255,.14);box-shadow:0 5px 0 rgba(84,25,26,.32),0 10px 22px rgba(0,0,0,.15)}
+.ticket{background:rgba(255,255,255,.035);box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
+.stats{border-color:rgba(35,29,23,.11);box-shadow:0 16px 38px rgba(16,29,21,.18)}
+.stat b{letter-spacing:-.04em}
+.card{backdrop-filter:blur(4px)}
+.section{padding-top:25px}
+.sched,.stoplist{border-top:3px solid rgba(198,78,72,.15)}
+.passcard{box-shadow:0 18px 42px rgba(12,31,22,.24)}
+.passcard h3{font-size:23px}
+.startwrap .btn{letter-spacing:.075em;text-transform:uppercase}
+
+.leghead{padding-top:25px;padding-bottom:31px;border-bottom:1px solid rgba(242,183,68,.12)}
+.leghead h2{text-wrap:balance}
+.legno{font-size:92px;right:12px;bottom:2px;color:rgba(255,248,233,.045)}
+.boardwrap{padding-top:16px}
+.board{box-shadow:0 18px 40px rgba(8,24,17,.46),0 0 0 1px rgba(242,183,68,.08)}
+.board .inner{min-height:106px}
+.board .txt .ins{font-size:18.5px;text-wrap:balance}
+.step{box-shadow:0 4px 12px rgba(25,31,24,.045)}
+.step.cur{transform:translateY(-1px)}
+.reveal{backdrop-filter:blur(3px)}
+.arrive{box-shadow:0 20px 46px rgba(13,38,27,.28)}
+.arrive h3{text-wrap:balance}
+
+/* Emergency escape hatch. Deliberately visually separate from normal rally nav. */
+.rescue{
+  margin:10px 13px 5px;padding:13px 13px 12px;border-radius:16px;
+  background:linear-gradient(145deg,#FFF7EA,#F8EBDD);border:1.5px solid rgba(183,58,53,.35);
+  box-shadow:0 7px 18px rgba(75,34,29,.08);position:relative;overflow:hidden;
+}
+.rescue::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:linear-gradient(var(--rescue),var(--rescue-deep))}
+.rescue-head{display:flex;align-items:center;gap:9px;padding-left:4px}
+.rescue-badge{flex:0 0 auto;display:flex;align-items:center;justify-content:center;width:31px;height:31px;border-radius:50%;background:var(--rescue);color:white;font-family:var(--disp);font-size:18px;font-weight:900;box-shadow:0 3px 8px rgba(122,37,36,.25)}
+.rescue-copy{min-width:0;flex:1}
+.rescue-copy b{display:block;font-size:13px;line-height:1.15;color:var(--rescue-deep)}
+.rescue-copy span{display:block;margin-top:3px;font-size:11px;line-height:1.38;color:var(--muted)}
+.rescue-link{display:flex;align-items:center;justify-content:center;width:100%;margin-top:10px;padding:12px 12px;border-radius:11px;text-decoration:none;background:linear-gradient(180deg,#C94A45,var(--rescue));color:#fff;font-size:12px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;box-shadow:0 5px 13px rgba(122,37,36,.22)}
+.rescue-link:active{transform:scale(.988)}
+.rescue small{display:block;margin:8px 3px 0;text-align:center;font-family:var(--mono);font-size:7.8px;line-height:1.45;letter-spacing:.08em;color:#8E7569;text-transform:uppercase}
+
+/* Keep useful status visible but quiet. */
+.wakepill{display:inline-flex!important;width:auto;margin:12px auto 0;position:relative;left:50%;transform:translateX(-50%);padding:5px 9px;border-radius:999px;background:rgba(23,55,43,.07);border:1px solid rgba(23,55,43,.13);color:#63776B}
+.wakepill[hidden]{display:none!important}
+
+@media (max-width:390px){
+  .hero{min-height:370px}.hero h1{font-size:37px}.hero .deck{font-size:15.5px}
+  .rescue{margin-left:11px;margin-right:11px}.rescue-link{font-size:11px}
+}
+
+</style>
+</head>
+<body>
+<svg style="display:none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<defs>
+<symbol id="g-st" viewBox="0 0 24 24"><path d="M12 20V5.5M12 5.5 7.2 10.3M12 5.5l4.8 4.8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="g-l" viewBox="0 0 24 24"><path d="M17 20v-6.5a4 4 0 0 0-4-4H7.5M11 5 6.7 9.5l4.3 4.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="g-r" viewBox="0 0 24 24"><path d="M7 20v-6.5a4 4 0 0 1 4-4h5.5M13 5l4.3 4.5L13 14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="g-shl" viewBox="0 0 24 24"><path d="M15.5 20v-8.6a3.2 3.2 0 0 0-5.7-2L6 13.5M6.8 7.2 5.5 14l6.8-1.3" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="g-mg" viewBox="0 0 24 24"><path d="M6.5 20c0-4.5 4-5.5 5.5-8.5M17.5 20c0-4.5-4-5.5-5.5-8.5V4.5M12 4.5 8.6 8M12 4.5l3.4 3.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="g-ex" viewBox="0 0 24 24"><path d="M7.5 20V4.5M7.5 13.5c4.5-1 7.5-3.8 8.6-8M12.2 4.3l4.2.9-.9 4.2" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="g-chk" viewBox="0 0 24 24"><path d="M4.5 12.8 9.6 18 19.5 6.5" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="g-scoop" viewBox="0 0 24 24"><path d="M12 22 7.6 12.6h8.8Z" fill="currentColor"/><path d="M6.2 9.2a5.8 5.8 0 0 1 11.6 0c0 1.5-.8 2.6-2 3.2H8.2c-1.2-.6-2-1.7-2-3.2Z" fill="currentColor" opacity=".85"/><circle cx="9.4" cy="6.8" r="1" fill="var(--pine-3,#0F221A)" opacity=".35"/><circle cx="13.6" cy="5.9" r="1" fill="var(--pine-3,#0F221A)" opacity=".35"/></symbol>
+<symbol id="g-flag" viewBox="0 0 24 24"><path d="M6 21V4m0 0h11l-2.6 4L17 12H6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</defs>
+</svg>
+<div class="app" id="app" aria-live="polite"></div>
+<script>
+/* ================= DATA — route verified turn-by-turn against the locked
+   Google Maps PDFs (Expo full-route, Batch→Klein, Crystal Spring→Klein).
+   d = distance driven AFTER the maneuver, to the next instruction. ================= */
+var LEGS=[
+{from:"Oaks Expo",to:"Merrymead Farm",miles:10.4,minutes:21,tag:"Warm-up",
+ turns:[
+  {g:"st",t:"Exit the lot toward Station Ave",d:"387 ft"},
+  {g:"l", t:"L onto Station Ave",d:"0.7 mi"},
+  {g:"l", t:"L onto Pawlings Rd / SR-4004",d:"4.1 mi"},
+  {g:"st",t:"Continue onto PA-363 N / S Valley Forge Rd",d:"5.5 mi"},
+  {g:"r", t:"R \u2014 Merrymead Farm on the right",d:""}],
+ detour:null,
+ fact:"Merrymead is a Pennsylvania Century Farm \u2014 the Rothenberger family has run it since 1914, five generations deep. It stayed a pure dairy operation until the retail farm market opened in July 1971. One more reason to start here: the Scooped grand prize drawing this year is a Merrymead Farm Family Experience.",
+ stop:{name:"Merrymead Farm",town:"Lansdale \u00b7 Worcester Township",addr:"2222 S Valley Forge Rd, Lansdale, PA 19446",
+  hours:"Sat dairy store & ice cream \u00b7 9 AM \u2013 9 PM",warn:false,note:null,
+  site:"https://merrymead.com/",map:"https://www.google.com/maps/search/?api=1&query=Merrymead+Farm+2222+S+Valley+Forge+Rd+Lansdale+PA+19446"}},
+
+{from:"Merrymead",to:"Flint Hill Farm",miles:32.3,minutes:47,tag:"I-476 \u00b7 TOLL",
+ turns:[
+  {g:"st",t:"Exit the lot toward PA-363 N / S Valley Forge Rd",d:"85 ft"},
+  {g:"l", t:"Use the right lane \u2014 turn L toward PA-363 N",d:"138 ft"},
+  {g:"r", t:"R onto PA-363 N / S Valley Forge Rd",d:"1.7 mi"},
+  {g:"l", t:"L onto Sumneytown Pike",d:"1.9 mi"},
+  {g:"sr",t:"Slight R (signs for I-476) \u2014 TOLL",d:"0.4 mi"},
+  {g:"mg",t:"Merge onto I-476 N, ramp to Allentown \u2014 TOLL",d:"13.5 mi"},
+  {g:"ex",t:"Exit 44 \u2192 PA-663 S toward Pottstown",d:"0.9 mi"},
+  {g:"r", t:"R onto Spinnerstown Rd",d:"0.6 mi"},
+  {g:"r", t:"R onto Steinsburg Rd",d:"2.2 mi"},
+  {g:"r", t:"R to stay on Steinsburg Rd",d:"0.1 mi"},
+  {g:"l", t:"L onto Allentown Rd / SR-4027",d:"0.8 mi"},
+  {g:"r", t:"R onto Grant Rd",d:"1.4 mi"},
+  {g:"l", t:"L onto N Old Bethlehem Pike",d:"0.4 mi"},
+  {g:"r", t:"R onto W Cherry Rd",d:"2.7 mi"},
+  {g:"l", t:"L onto California Rd",d:"1.1 mi"},
+  {g:"l", t:"L onto Keystone Rd",d:"0.8 mi"},
+  {g:"sl",t:"Slight L onto Richlandtown Pike",d:"2.7 mi"},
+  {g:"l", t:"L onto Flint Hill Rd",d:"1.0 mi"},
+  {g:"l", t:"L onto Forest Dr",d:"0.1 mi"},
+  {g:"l", t:"L (unnamed)",d:"495 ft"},
+  {g:"r", t:"R \u2014 Flint Hill Farm on the left",d:""}],
+ detour:null,
+ fact:"Farm buildings here date to about 1850; the Cicon and Hassick families worked this land for a century before it became an educational farm in 1997. Coopersburg was serious cattle country \u2014 Peter Cooper's grandson was known nationally as the \u201cJersey Cattle King,\u201d and buyers arrived for his annual sale in private railroad cars.",
+ stop:{name:"Flint Hill Farm Educational Center",town:"Coopersburg",addr:"1922 Flint Hill Rd, Coopersburg, PA 18036",
+  hours:"Sat \u00b7 open to 5:30 PM",warn:false,
+  note:"Ice cream is self-serve here \u2014 pre-scooped from the farm-store freezer. Portable bathrooms on site.",
+  site:"https://www.flinthillfarm-edcenter.org/",map:"https://www.google.com/maps/search/?api=1&query=Flint+Hill+Farm+Educational+Center+1922+Flint+Hill+Rd+Coopersburg+PA+18036"}},
+
+{from:"Flint Hill",to:"Batch Microcreamery",miles:6.2,minutes:13,tag:"Quick hop",
+ turns:[
+  {g:"st",t:"Head north",d:"135 ft"},
+  {g:"l", t:"L toward Forest Dr",d:"495 ft"},
+  {g:"r", t:"R onto Forest Dr",d:"0.1 mi"},
+  {g:"l", t:"L onto Flint Hill Rd",d:"1.6 mi"},
+  {g:"l", t:"L onto Suter Rd",d:"0.2 mi"},
+  {g:"r", t:"R onto Passer Rd",d:"0.6 mi"},
+  {g:"r", t:"R onto PA-309 N",d:"0.5 mi"},
+  {g:"sr",t:"Slight R onto PA-378 N",d:"1.8 mi"},
+  {g:"l", t:"L onto Saucon Creek Rd",d:"0.7 mi"},
+  {g:"l", t:"L onto Center Valley Pkwy",d:"0.2 mi"},
+  {g:"r", t:"R onto E Saucon Valley Cir",d:"433 ft"},
+  {g:"l", t:"L onto Movie Ave",d:"0.1 mi"},
+  {g:"l", t:"L \u2014 Batch Microcreamery on the left",d:""}],
+ detour:null,
+ fact:"Batch was built by two childhood best friends after a decade of Rick Pongracz giving homemade ice cream away to coworkers who kept telling him to open a shop. The \u201cmicrocreamery\u201d name is deliberate \u2014 craft-brewery energy, just colder. Scooped bonus: Batch is one of 17 trail creameries offering a discount \u2014 10% off your purchase.",
+ stop:{name:"Batch Microcreamery",town:"Center Valley \u00b7 Promenade Shops",addr:"2845 Center Valley Pkwy Ste 604, Center Valley, PA 18034",
+  hours:"Sat \u00b7 11 AM \u2013 9 PM",warn:false,
+  note:"At the Promenade Shops, across from the AMC and Red Robin. Mention the Scooped trail \u2014 10% off here.",
+  site:"https://batchmicrocreamery.com/",map:"https://www.google.com/maps/search/?api=1&query=Batch+Microcreamery+2845+Center+Valley+Pkwy+Suite+604+Center+Valley+PA+18034"}},
+
+{from:"Batch",to:"Crystal Spring Farm",miles:23.1,minutes:45,tag:"Game Preserve route",
+ turns:[
+  {g:"st",t:"Exit the lot toward Center Valley Pkwy",d:"325 ft"},
+  {g:"l", t:"L toward Gazebo Ln",d:"174 ft"},
+  {g:"l", t:"L toward Gazebo Ln",d:"180 ft"},
+  {g:"st",t:"Continue straight onto Gazebo Ln",d:"0.1 mi"},
+  {g:"mg",t:"Merge onto Center Valley Pkwy",d:"1.0 mi"},
+  {g:"sr",t:"Slight R to merge onto PA-309 N toward Allentown / I-78",d:"0.2 mi"},
+  {g:"sl",t:"Keep left to stay on PA-309 N",d:"0.6 mi"},
+  {g:"mg",t:"Merge onto I-78 W / PA-309 N, ramp to Harrisburg / Tamaqua",d:"6.2 mi"},
+  {g:"ex",t:"Right 2 lanes \u2192 Exit 53, PA-309 N toward I-476 / Tamaqua",d:"1.0 mi"},
+  {g:"st",t:"Continue onto PA-309 N",d:"3.8 mi"},
+  {g:"l", t:"L onto Kernsville Rd",d:"1.0 mi"},
+  {g:"sr",t:"Slight R onto Jordan Rd",d:"1.6 mi"},
+  {g:"l", t:"L onto Ruheton Hill Rd",d:"0.8 mi"},
+  {g:"st",t:"Continue straight onto Game Preserve Rd",d:"0.7 mi"},
+  {g:"r", t:"R (unnamed preserve road)",d:"1.0 mi"},
+  {g:"r", t:"R (unnamed)",d:"1.4 mi"},
+  {g:"r", t:"R (unnamed)",d:"0.8 mi"},
+  {g:"r", t:"R onto Game Preserve Rd",d:"0.4 mi"},
+  {g:"l", t:"L onto PA-309 N",d:"0.3 mi"},
+  {g:"st",t:"Continue straight onto PA-873 N",d:"1.3 mi"},
+  {g:"r", t:"R onto PA-329 E / Bellview Rd",d:"0.8 mi"},
+  {g:"r", t:"R (approach lane)",d:"282 ft"},
+  {g:"l", t:"L \u2014 Crystal Spring Farm on the right",d:""}],
+ detour:{title:"Geiger Bridge & Trexler Preserve",
+  text:"This leg takes the long way through Trexler Nature Preserve \u2014 1,108 acres General Harry Trexler started buying in 1901 specifically to save American bison from extinction. Jordan Creek runs through it, crossed by the 1860 Geiger Covered Bridge, a Burr Truss span with a stepped-portal entrance unlike any other bridge in the valley. The four unnamed rights are the preserve roads \u2014 watch the distances between turns."},
+ fact:"Crystal Spring traces to 1903, founded by Irwin and Katie Piefly; the farmhouse went up in 1872. The Sell family pivoted from potatoes to dairy in 1966 and now milks a 300-head Holstein herd on generation five. Schnecksville is named for Adam Schneck, who settled here in 1756 \u2014 his log home still stands, just moved down the road.",
+ stop:{name:"Crystal Spring Farm",town:"Schnecksville",addr:"3550 Bellview Rd, Schnecksville, PA 18078",
+  hours:"Summer ice-cream patio \u00b7 to 6 PM",warn:true,
+  note:"Tightest close on the back half of the route \u2014 keep the stop efficient if the day is running long.",
+  site:"https://crystalspringfarmpa.com/",map:"https://www.google.com/maps/search/?api=1&query=Crystal+Spring+Farm+3550+Bellview+Rd+Schnecksville+PA+18078"}},
+
+{from:"Crystal Spring",to:"Klein Farms",miles:28.8,minutes:46,tag:"Jacobsburg backroad",
+ turns:[
+  {g:"st",t:"Exit the parking lot",d:"98 ft"},
+  {g:"r", t:"R toward PA-329 E / Bellview Rd",d:"282 ft"},
+  {g:"r", t:"R onto PA-329 E / Bellview Rd",d:"0.6 mi"},
+  {g:"l", t:"L onto Old Post Rd",d:"0.8 mi"},
+  {g:"r", t:"R onto Neffs Laurys Rd",d:"1.2 mi"},
+  {g:"l", t:"L onto Ridge Rd",d:"0.2 mi"},
+  {g:"r", t:"R onto Rising Sun Rd",d:"2.7 mi"},
+  {g:"l", t:"L onto PA-145 N",d:"1.1 mi"},
+  {g:"r", t:"R onto Blue Mountain Dr",d:"1.9 mi"},
+  {g:"r", t:"R onto PA-248 E / Lehigh Dr \u2014 follow PA-248 E",d:"3.7 mi"},
+  {g:"l", t:"L onto Valley View Dr",d:"3.4 mi"},
+  {g:"st",t:"Continue onto PA-946 E / Community Dr \u2014 follow PA-946 E",d:"3.3 mi"},
+  {g:"sl",t:"Slight L onto Cherry Hill Rd",d:"3.4 mi"},
+  {g:"r", t:"R onto Bushkill Center Rd / Center Rd",d:"0.1 mi"},
+  {g:"shl",t:"Sharp L onto Jacobsburg Rd",d:"0.9 mi"},
+  {g:"r", t:"R onto Filetown Rd",d:"1.4 mi"},
+  {g:"r", t:"R onto Sullivan Trail",d:"0.4 mi"},
+  {g:"mg",t:"Merge onto PA-191 S / Main St \u2014 follow Main St",d:"1.7 mi"},
+  {g:"st",t:"Continue onto Sullivan Trail",d:"0.1 mi"},
+  {g:"l", t:"L onto Church Ln",d:"0.9 mi"},
+  {g:"l", t:"L onto Kesslersville Rd",d:"0.5 mi"},
+  {g:"sr",t:"Slight R onto Klein Rd / T629",d:"0.4 mi"},
+  {g:"r", t:"R (farm lane)",d:"62 ft"},
+  {g:"l", t:"L \u2014 Klein Farms on the right",d:""}],
+ detour:{title:"Jacobsburg State Park",
+  text:"Backroading into Easton through Jacobsburg \u2014 site of the Henry family gunworks going back to 1792. Henry rifles armed the American fur trade and every major U.S. conflict from the Revolution through the Civil War. The old homestead is now a Pennsylvania longrifle museum."},
+ fact:"Klein Farms has been a dairy farm since Roy Klein arrived in 1935 \u2014 third generation now \u2014 and the same address is home to La Farm Girls cow cuddling, if the ice cream isn't relaxing enough. Easton got one of only three public readings of the Declaration of Independence outside Philadelphia, and it's the birthplace of Crayola.",
+ stop:{name:"Klein Farms Dairy & Creamery",town:"Easton \u00b7 Forks Township",addr:"410 Klein Rd, Easton, PA 18040",
+  hours:"Happy Holstein Ice Cream \u00b7 11 AM \u2013 7 PM",warn:false,
+  note:"Finish line. Dairy store itself runs 8 AM \u2013 7 PM if anyone wants raw milk or cheese for the ride home.",
+  site:"https://kleinfarms.com/",map:"https://www.google.com/maps/search/?api=1&query=Klein+Farms+Dairy+Creamery+410+Klein+Rd+Easton+PA+18040",finish:true}}
+];
+var PASSPORT="https://www.visitpa.com/explore/trips-trails/scooped-ice-cream-trail/";
+var TOTAL_TURNS=LEGS.reduce(function(a,l){return a+l.turns.length},0);
+</script>
+<script>
+/* ================= STATE ================= */
+var KEY="fgftRally_v3";
+var mem={};
+function loadState(){
+  var raw=null;
+  try{raw=window.localStorage.getItem(KEY)}catch(e){raw=mem[KEY]||null}
+  var s;
+  try{s=raw?JSON.parse(raw):null}catch(e){s=null}
+  if(!s||!s.turns||s.turns.length!==LEGS.length||!s.legStart||!s.legEnd) s=freshState();
+  return s;
+}
+function freshState(){
+  return{screen:"home",leg:0,started:false,
+    turns:LEGS.map(function(l){return l.turns.map(function(){return false})}),
+    legDone:LEGS.map(function(){return false}),
+    checkin:LEGS.map(function(){return false}),
+    legStart:LEGS.map(function(){return null}),
+    legEnd:LEGS.map(function(){return null})};
+}
+function markStart(li){if(state.legStart[li]==null)state.legStart[li]=Date.now()}
+function syncLegClock(li){
+  var done=legTurnsDone(li);
+  if(done&&state.legEnd[li]==null&&state.legStart[li]!=null)state.legEnd[li]=Date.now();
+  if(!done)state.legEnd[li]=null;
+}
+function legRunMin(li){
+  if(state.legStart[li]==null||state.legEnd[li]==null)return null;
+  return Math.max(1,Math.round((state.legEnd[li]-state.legStart[li])/60000));
+}
+function buzz(){try{if(navigator.vibrate)navigator.vibrate(12)}catch(e){}}
+function save(){
+  var raw=JSON.stringify(state);
+  try{window.localStorage.setItem(KEY,raw)}catch(e){mem[KEY]=raw}
+}
+var state=loadState();
+
+/* ================= HELPERS ================= */
+function esc(s){return String(s).replace(/[&<>"']/g,function(m){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]})}
+function glyph(code,cls){
+  var rot="";var id=code;
+  if(code==="sl"){id="st";rot="transform:rotate(-45deg)"}
+  if(code==="sr"){id="st";rot="transform:rotate(45deg)"}
+  return '<svg style="'+rot+'" class="'+(cls||"")+'" aria-hidden="true"><use href="#g-'+id+'"/></svg>';
+}
+function fmtMin(m){var h=Math.floor(m/60),mm=m%60;return h?(h+" hr "+mm+" min"):(mm+" min")}
+function doneTurns(){var n=0;state.turns.forEach(function(l){l.forEach(function(v){if(v)n++})});return n}
+function legTurnsDone(li){return state.turns[li].every(function(v){return v})}
+function nextTurnIdx(li){return state.turns[li].findIndex(function(v){return !v})}
+function stopsReached(){return state.legDone.filter(Boolean).length}
+function bailoutURL(stop){
+  return "https://www.google.com/maps/dir/?api=1&destination="+encodeURIComponent(stop.addr)+"&travelmode=driving&dir_action=navigate";
+}
+
+/* ================= RAIL ================= */
+function railHTML(){
+  var h='<div class="rail"><div class="rail-track">';
+  h+='<button class="rail-chip'+(state.screen==="home"?" active":"")+'" data-action="go-home">HOME</button>';
+  LEGS.forEach(function(l,i){
+    h+='<div class="rail-line'+(state.legDone[i]||(state.screen==="leg"&&state.leg>=i)||state.screen==="finish"?" done":"")+'"></div>';
+    var cls=state.screen==="leg"&&state.leg===i?" current":(state.legDone[i]?" done":"");
+    var inner=state.legDone[i]?'<svg aria-hidden="true"><use href="#g-chk"/></svg>':String(i+1);
+    h+='<button class="rail-dot'+cls+'" data-action="go-leg" data-leg="'+i+'" aria-label="Leg '+(i+1)+'">'+inner+'</button>';
+  });
+  h+='<div class="rail-line'+(state.screen==="finish"?" done":"")+'"></div>';
+  h+='<button class="rail-chip'+(state.screen==="finish"?" active":"")+'" data-action="go-finish">FIN</button>';
+  h+='</div><div class="railbar"><i style="width:'+Math.round(doneTurns()/TOTAL_TURNS*100)+'%"></i></div></div>';
+  return h;
+}
+
+/* ================= HOME ================= */
+function homeHTML(){
+  var h='<div class="screen">';
+  h+='<div class="hero"><span class="plate"><b>SAT AUG 15 2026</b> · OAKS → EASTON</span>';
+  h+='<div class="hero-mark" aria-hidden="true"><svg><use href="#g-scoop"/></svg><span>✦</span></div>';
+  h+='<h1>FREAKS, GEEKS<em>&amp; FROZEN TREATS</em></h1>';
+  h+='<p class="deck">An Oddities-to-Ice-Cream Road Rally</p>';
+  h+='<p class="sub">No timing. No tricks. Just a navigator, five official Scooped stops, some excellent Pennsylvania back roads, and a frankly irresponsible amount of dairy.</p>';
+  h+='<span class="twisted">100.8 miles · 5 creameries · 1 twisted Saturday</span><span class="ticket">ADMIT ALL · NO TIMING · NO SCORING</span>';
+  h+='<svg class="scallop" viewBox="0 0 560 28" preserveAspectRatio="none" aria-hidden="true"><path d="M0 28h560v-9c-20 0-20-11-40-11s-20 11-40 11-20-11-40-11-20 11-40 11-20-11-40-11-20 11-40 11-20-11-40-11-20 11-40 11-20-11-40-11-20 11-40 11-20-11-40-11S20 19 0 19Z" fill="currentColor"/></svg></div>';
+  h+='<div class="stats"><div class="stat"><b>100.8</b><span>Miles</span></div><div class="stat"><b>2:52</b><span>Drive time</span></div><div class="stat"><b>5</b><span>Official stops</span></div></div>';
+
+  h+='<div class="section"><span class="kicker" style="color:var(--berry)">Act I · The Weird Stuff</span><h2 class="secname">Saturday, properly twisted</h2>';
+  h+='<div class="card sched">';
+  h+='<div class="slot"><span class="tm">10:00 AM</span><div class="what"><b>Oddities & Curiosities Expo</b><span>Greater Philadelphia Expo Center, 100 Station Ave, Oaks. Wander the weird, find something delightfully strange, regroup before noon.</span></div></div>';
+  h+='<div class="slot"><span class="tm">11:45 AM</span><div class="what"><b>Regroup at the cars</b><span>Load up. Navigator gets the phone. Driver gets the road. Everybody wins.</span></div></div>';
+  h+='<div class="slot"><span class="tm">12:00 PM</span><div class="what"><b>Roll-out · Leg 1</b><span>Five legs, '+TOTAL_TURNS+' route instructions, ice cream at the end of every single one.</span></div></div>';
+  h+='</div></div>';
+
+  h+='<div class="section"><span class="kicker" style="color:var(--berry)">Act II · The Dairy Quest</span><h2 class="secname">Five stops. All of them official.</h2>';
+  h+='<div class="card stoplist">';
+  LEGS.forEach(function(l,i){
+    h+='<div class="srow"><span class="num">'+(i+1)+'</span><div class="nm"><b>'+esc(l.stop.name)+'</b><span>'+esc(l.stop.town)+'</span></div><div class="lg">'+l.miles.toFixed(1)+' MI<br>'+l.minutes+' MIN</div></div>';
+  });
+  h+='</div></div>';
+
+  h+='<div class="passcard"><span class="kicker" style="color:var(--custard)">VisitPA · Scooped 2026</span>';
+  h+='<h3>Do the official check-in thing</h3>';
+  h+='<p>This guide gets you there. VisitPA gives you the credit. The pass is mobile-only and needs no app install.</p>';
+  h+='<div class="pass-steps"><div class="pass-step"><b>1</b><span>Buy something</span></div><div class="pass-step"><b>2</b><span>Ask for the PIN</span></div><div class="pass-step"><b>3</b><span>Check in</span></div></div>';
+  h+='<p>It works within about five miles and can sync later if the signal gets weird. Trail runs June 4 – Sept 7.</p>';
+  h+='<div class="prizes"><div class="prize"><b>6</b><span>check-ins<br>insulated bag</span></div><div class="prize"><b>10</b><span>grand prize<br>entry</span></div><div class="prize"><b>16</b><span>both<br>rewards</span></div></div>';
+  h+='<p style="margin:11px 0 13px">Today gets you five. The sixth scoop is homework — save it for the ride home or another weird little road trip.</p>';
+  h+='<a class="btn sm" href="'+PASSPORT+'" target="_blank" rel="noopener">OPEN THE OFFICIAL SCOOPED PASS</a></div>';
+
+  h+='<div class="startwrap"><button class="btn" data-action="start">'+(state.started?"RESUME THE RALLY":"START THE RALLY")+'</button></div>';
+  h+='<div class="footnote">DRIVE IT LIKE A SUNDAE · posted limits · navigator reads, driver drives · dairy consequences are personal</div>';
+  h+='</div>';
+  return h;
+}
+
+/* ================= LEG ================= */
+function legHTML(){
+  var li=state.leg,leg=LEGS[li],checks=state.turns[li];
+  var ni=nextTurnIdx(li),arrived=ni===-1;
+  var h='<div class="screen">';
+  h+='<div class="leghead"><span class="legno">0'+(li+1)+'</span><span class="kicker" style="color:var(--custard)">FREAKS · GEEKS · FROZEN TREATS · LEG '+(li+1)+' OF 5</span>';
+  h+='<div class="route"><span class="fr">'+esc(leg.from)+' \u2192</span></div><h2>'+esc(leg.to)+'</h2>';
+  h+='<div class="legmeta"><span class="mchip">'+leg.miles.toFixed(1)+' MI</span><span class="mchip">'+leg.minutes+' MIN</span><span class="mchip">'+leg.turns.length+' INSTRUCTIONS</span><span class="mchip warn">'+esc(leg.tag)+'</span></div></div>';
+
+  /* Turn board */
+  h+='<div class="boardwrap">';
+  if(!arrived){
+    var tn=leg.turns[ni];
+    h+='<button class="board slide" data-action="board" aria-label="Mark current instruction done"><span class="tapnote">TAP WHEN DONE</span><span class="inner">';
+    h+='<span class="glyph">'+glyph(tn.g)+'</span>';
+    h+='<span class="txt"><span class="lbl">NEXT MOVE \u00b7 '+(ni+1)+' OF '+leg.turns.length+'</span><span class="ins">'+esc(tn.t)+'</span>';
+    h+=tn.d?'<span class="then">NEXT CUE IN '+esc(tn.d)+'</span>':'<span class="then">DESTINATION</span>';
+    h+='</span></span></button>';
+  }else{
+    h+='<div class="board alldone"><span class="inner"><span class="glyph">'+glyph("chk")+'</span><span class="txt"><span class="lbl">ALL INSTRUCTIONS CLEARED</span><span class="ins">You\u2019re at '+esc(leg.stop.name)+'</span></span></span></div>';
+  }
+  h+='</div>';
+
+  /* Bailout: abandon the custom route and let Google route from current location. */
+  if(!arrived){
+    h+='<div class="rescue"><div class="rescue-head"><span class="rescue-badge">!</span><div class="rescue-copy"><b>Lost the plot?</b><span>Skip the rally instructions and go straight to '+esc(leg.stop.name)+'.</span></div></div>';
+    h+='<a class="rescue-link" href="'+bailoutURL(leg.stop)+'" target="_blank" rel="noopener">BAIL OUT → GOOGLE MAPS</a>';
+    h+='<small>Uses your current location when available · Google chooses the recovery route</small></div>';
+  }
+
+  /* Turn list */
+  h+='<div class="turns">';
+  leg.turns.forEach(function(t,i){
+    var done=checks[i],cur=i===ni;
+    h+='<button class="step'+(done?" done":"")+(cur?" cur":"")+'" data-action="toggle" data-idx="'+i+'" aria-pressed="'+done+'">';
+    h+='<span class="g">'+glyph(t.g)+'</span>';
+    h+='<span class="t">'+(i+1)+'. '+esc(t.t)+(t.d?'<small>NEXT CUE IN '+esc(t.d)+'</small>':'<small>DESTINATION</small>')+'</span>';
+    h+='<span class="chk"><svg aria-hidden="true"><use href="#g-chk"/></svg></span></button>';
+  });
+  h+='</div>';
+
+  if(leg.detour) h+='<details class="reveal det"><summary>SCENIC WEIRDNESS \u00b7 '+esc(leg.detour.title)+'<span class="pm">+</span></summary><div class="body">'+esc(leg.detour.text)+'</div></details>';
+  h+='<details class="reveal"><summary>NAVIGATOR LORE \u00b7 READ ALOUD<span class="pm">+</span></summary><div class="body">'+esc(leg.fact)+'</div></details>';
+
+  /* Arrival card */
+  if(arrived){
+    var s=leg.stop;
+    h+='<div class="arrive"><div class="top"><span class="kicker">'+(s.finish?"FINISH LINE \u00b7 ":"")+'STOP '+(li+1)+' \u00b7 OFFICIAL 2026 SCOOPED PARTICIPANT</span>';
+    h+='<h3>'+esc(s.name)+'</h3><div class="addr">'+esc(s.addr)+'<br>'+esc(s.town)+'</div>';
+    h+='<span class="hrs'+(s.warn?" warn":"")+'">'+esc(s.hours)+'</span>';
+    var rm=legRunMin(li);
+    if(rm!==null)h+=' <span class="hrs" style="margin-left:6px">LEG RUN '+rm+' MIN · BENCH '+leg.minutes+' MIN</span>';
+    h+='</div>';
+    if(s.note) h+='<div class="note">'+esc(s.note)+'</div>';
+    h+='<div class="checkin"><span class="cl">Official Scooped check-in \u00b7 do not forget this bit</span>';
+    h+='<p>Buy something, get the 4-digit PIN from staff, and enter it in the official Scooped pass. Arriving here does not magically count. The digital passport still needs the PIN.</p>';
+    h+='<label><input type="checkbox" data-action="checkin"'+(state.checkin[li]?" checked":"")+'><span>Official check-in done at '+esc(s.name)+'</span></label></div>';
+    h+='<div class="actions"><a href="'+s.map+'" target="_blank" rel="noopener">OPEN MAP</a><a href="'+esc(s.site)+'" target="_blank" rel="noopener">CREAMERY</a><a class="gold" href="'+PASSPORT+'" target="_blank" rel="noopener">CHECK IN</a>';
+    h+='<a href="#" data-action="'+(s.finish?"go-finish":"complete")+'" style="background:var(--red);color:var(--sign)">'+(s.finish?"Finish rally":"NEXT LEG \u2192")+'</a></div>';
+    h+='</div>';
+  }
+
+  h+='<div class="wakepill" id="wakepill" hidden>SCREEN STAYING AWAKE FOR THE NAVIGATOR</div>';
+  h+='<div class="legfoot"><button class="undo" data-action="undo">Undo leg</button>';
+  if(!arrived) h+='<button class="btn pine sm" data-action="arrived-skip">We\u2019re here \u2014 mark leg arrived</button>';
+  else h+='<button class="btn sm" data-action="'+(leg.stop.finish?"go-finish":"complete")+'">'+(leg.stop.finish?"FINISH RALLY":"LEG COMPLETE \u2192 NEXT STOP")+'</button>';
+  h+='</div></div>';
+  return h;
+}
+
+/* ================= FINISH ================= */
+function finishHTML(){
+  var reached=stopsReached(),ck=state.checkin.filter(Boolean).length;
+  var h='<div class="screen">';
+  h+='<div class="fin"><div class="medal"><svg aria-hidden="true"><use href="#g-scoop"/></svg></div>';
+  h+='<h2>YOU GLORIOUS WEIRDOS<em>MADE IT TO THE FINISH.</em></h2>';
+  h+='<p>100.8 miles, five creameries, one twisted Saturday. Freaks fed. Geeks frozen. Rally complete.</p></div>';
+  h+='<div class="tally"><div class="card"><b>'+reached+' / 5</b><span>Stops reached</span></div><div class="card"><b>'+ck+' / 5</b><span>Official check-ins</span></div></div>';
+  var tot=0,any=false;LEGS.forEach(function(_,i){var r=legRunMin(i);if(r!==null){tot+=r;any=true}});
+  if(any)h+='<div class="section" style="padding-top:12px"><div class="card" style="padding:13px 16px;text-align:center;font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.1em;color:var(--muted)">TIMED DRIVING · '+fmtMin(tot)+' · GOOGLE BENCHMARK 2 HR 52 MIN</div></div>';
+  if(ck<5){
+    h+='<div class="section"><div class="card" style="padding:16px"><span class="kicker" style="color:var(--berry)">Tiny paperwork emergency</span><h2 class="secname" style="font-size:20px;margin-top:5px">You missed a check-in</h2><p style="margin:0;font-size:13px;line-height:1.57;color:var(--muted)">The guide shows '+ck+' of 5 official check-ins. If a PIN got missed, the pass may still work while you are within about five miles of that creamery. Handle it before the caravan disappears into the sunset.</p></div></div>';
+  }
+  h+='<div class="passcard"><span class="kicker" style="color:var(--custard)">Post-credit scene</span><h3>The sixth scoop is homework</h3>';
+  h+='<p>Six total Scooped check-ins earns the commemorative insulated bag. You are one official creamery short. Do that whenever you feel like it before Sept 7 — this rally has already asked enough of your afternoon.</p>';
+  h+='<a class="btn sm" href="'+PASSPORT+'" target="_blank" rel="noopener">FIND YOUR SIXTH SCOOP</a></div>';
+  h+='<div class="section"><button class="btn ghost sm" data-action="reset">Reset the whole rally</button></div>';
+  h+='<div class="footnote">Freaks, Geeks & Frozen Treats · Aug 15 2026 · get everybody home safe</div>';
+  h+='</div>';
+  return h;
+}
+
+/* ================= RENDER + EVENTS ================= */
+var root=document.getElementById("app");
+function render(){
+  var h=railHTML();
+  if(state.screen==="home")h+=homeHTML();
+  else if(state.screen==="leg")h+=legHTML();
+  else h+=finishHTML();
+  root.innerHTML=h;
+  save();
+}
+root.addEventListener("click",function(e){
+  var el=e.target.closest("[data-action]");
+  if(!el)return;
+  var a=el.getAttribute("data-action");
+  if(el.tagName==="A"&&a){e.preventDefault()}
+  if(a==="start"){state.started=true;state.screen="leg";var f=state.legDone.findIndex(function(v){return !v});state.leg=f===-1?LEGS.length-1:f;render();window.scrollTo(0,0)}
+  else if(a==="go-home"){state.screen="home";render();window.scrollTo(0,0)}
+  else if(a==="go-finish"){if(state.screen==="leg"&&LEGS[state.leg].stop.finish&&legTurnsDone(state.leg)){state.legDone[state.leg]=true}state.screen="finish";render();window.scrollTo(0,0)}
+  else if(a==="go-leg"){state.screen="leg";state.leg=parseInt(el.getAttribute("data-leg"),10);state.started=true;render();window.scrollTo(0,0)}
+  else if(a==="board"){var ni=nextTurnIdx(state.leg);if(ni>-1){markStart(state.leg);state.turns[state.leg][ni]=true;syncLegClock(state.leg);if(legTurnsDone(state.leg)){state.legDone[state.leg]=true}buzz();render()}}
+  else if(a==="toggle"){var i=parseInt(el.getAttribute("data-idx"),10);if(!state.turns[state.leg][i])markStart(state.leg);state.turns[state.leg][i]=!state.turns[state.leg][i];syncLegClock(state.leg);state.legDone[state.leg]=legTurnsDone(state.leg);buzz();render()}
+  else if(a==="arrived-skip"){state.turns[state.leg]=LEGS[state.leg].turns.map(function(){return true});state.legDone[state.leg]=true;render();window.scrollTo(0,0)}
+  else if(a==="complete"){state.legDone[state.leg]=true;if(state.leg<LEGS.length-1){state.leg+=1}render();window.scrollTo(0,0)}
+  else if(a==="undo"){var li=state.leg;state.turns[li]=LEGS[li].turns.map(function(){return false});state.legDone[li]=false;state.checkin[li]=false;state.legStart[li]=null;state.legEnd[li]=null;render();window.scrollTo(0,0)}
+  else if(a==="reset"){if(window.confirm("Reset every turn, arrival and check-in?")){state=freshState();render();window.scrollTo(0,0)}}
+});
+root.addEventListener("change",function(e){
+  var el=e.target.closest("[data-action='checkin']");
+  if(!el)return;
+  state.checkin[state.leg]=el.checked;save();
+});
+render();
+
+/* ---- Screen Wake Lock: keep the phone lit while navigating a leg ---- */
+var wl=null;
+function wantWake(){return state.screen==="leg"}
+function updateWakePill(){var p=document.getElementById("wakepill");if(p)p.hidden=!wl}
+function acquireWake(){
+  if(!("wakeLock" in navigator)||!wantWake()||wl)return updateWakePill();
+  navigator.wakeLock.request("screen").then(function(s){
+    wl=s;updateWakePill();
+    s.addEventListener("release",function(){wl=null;updateWakePill()});
+  }).catch(function(){wl=null;updateWakePill()});
+}
+function releaseWake(){if(wl){wl.release().catch(function(){});wl=null}updateWakePill()}
+document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")acquireWake()});
+var _render=render;
+render=function(){_render();if(wantWake())acquireWake();else releaseWake();updateWakePill()};
+acquireWake();updateWakePill();
+</script>
+</body>
+</html>
